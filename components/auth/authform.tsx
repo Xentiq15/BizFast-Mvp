@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase'; // Se till att denna fil exporterar en korrekt supabase client
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -56,6 +56,7 @@ export function AuthForm({ type }: AuthFormProps) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          autoComplete="email"
         />
       </div>
       <div>
@@ -66,6 +67,8 @@ export function AuthForm({ type }: AuthFormProps) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          autoComplete={type === 'login' ? 'current-password' : 'new-password'}
+          minLength={6}
         />
       </div>
       {error && <p className="text-red-500 text-sm">{error}</p>}
