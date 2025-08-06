@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
-import ProfileHeader from '@/components/public/ProfileHeader';
-import ServiceCard from '@/components/public/ServiceCard';
-import BookingForm from '@/components/public/BookingForm';
+import ProfileHeader from '@/components/public/profileHeader';
+import ServiceCard from '@/components/public/serviceCard';
+import BookingForm from '@/components/public/bookingForm';
 
 export default async function PublicProfilePage({
   params,
