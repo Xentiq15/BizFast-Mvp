@@ -1,45 +1,39 @@
-import { createClient } from '@/lib/supabase';
-import { notFound } from 'next/navigation';
-import ProfileHeader from '@/components/public/profileHeader';
+import { createClient } from '@supabase/supabase-js';
 import ServiceCard from '@/components/public/serviceCard';
-import BookingForm from '@/components/public/bookingForm';
 
-export default async function PublicProfilePage({
+export default async function UserPage({
   params,
 }: {
   params: { username: string };
 }) {
-  const supabase = createClient();
+  // Initiera Supabase-klient
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_KEY!
+  );
 
-  // Hämta användaren baserat på användarnamn
-  const { data: profile } = await supabase
-    .from('profiles')
+  // Hämta användardata (exempel)
+  const { data: user, error } = await supabase
+    .from('users')
     .select('*')
     .eq('username', params.username)
     .single();
 
-  if (!profile) {
-    notFound();
+  if (error) {
+    return <div>Kunde inte hitta användaren</div>;
   }
 
-  // Hämta användarens tjänst
-  const { data: service } = await supabase
-    .from('services')
-    .select('*')
-    .eq('user_id', profile.id)
-    .single();
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <ProfileHeader profile={profile} />
-        
-        {service && (
-          <>
-            <ServiceCard service={service} className="mt-6" />
-            <BookingForm serviceId={service.id} className="mt-8" />
-          </>
-        )}
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold">{user.username}s profil</h1>
+      
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <ServiceCard
+          title="Grundläggande konsultation"
+          description="30-minuters videochatt"
+          price={499}
+        />
+        {/* Lägg till fler tjänster här */}
       </div>
     </div>
   );
